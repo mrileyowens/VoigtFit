@@ -148,8 +148,8 @@ class Component(object):
         return self.options[key]
 
     def get_pars(self):
-        """Unpack the physical parameters [z, b, logN]"""
-        return [self.z, self.b, self.logN]
+        """Unpack the physical parameters [z, b, logN, rf]"""
+        return [self.z, self.b, self.logN, self.rf]
 
     def __repr__(self):
         """String representation of the :class:`Component <VoigtFit.container.components.Component>` instance"""
