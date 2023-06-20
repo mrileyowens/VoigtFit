@@ -1267,8 +1267,8 @@ class DataSet(object):
                 print("Defining following components:")
                 print("(the lines below can be copied directly to the input file)\n")
                 for z, b, logN in comp_list:
-                    print("component %s  z=%.6f  b=%.1f  logN=%.2f" % (line.ion, z, b, logN))
-                    self.add_component(line.ion, z, b, logN)
+                    print("component %s  z=%.6f  b=%.1f  logN=%.2f f=%.2f" % (line.ion, z, b, logN, f))
+                    self.add_component(line.ion, z, b, logN, f)
             else:
                 print("No components were defined. Are you sure you want to continue?")
 
@@ -1384,12 +1384,13 @@ class DataSet(object):
                         self.best_fit.pop(parname)
 
         for comp_pars in components_to_add:
-            (num, ion, z, b, logN, z_err, b_err, logN_err) = comp_pars
-            self.add_component(ion, z, b, logN)
+            (num, ion, z, b, logN, f, z_err, b_err, logN_err, f_err) = comp_pars
+            self.add_component(ion, z, b, logN, f)
             if fit_pars and self.best_fit:
                 parlist = [['z', z, z_err],
                            ['b', b, b_err],
-                           ['logN', logN, logN_err]]
+                           ['logN', logN, logN_err],
+                           ['f', f, f_err]]
 
                 for base, val, err in parlist:
                     parname = '%s%i_%s' % (base, num, ion)
