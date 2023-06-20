@@ -153,7 +153,7 @@ class Component(object):
 
     def __repr__(self):
         """String representation of the :class:`Component <VoigtFit.container.components.Component>` instance"""
-        line_string = "<Component: z=%.5f  b=%.1f  logN=%.1f>" % (self.z, self.b, self.logN)
+        line_string = "<Component: z=%.5f  b=%.1f  logN=%.1f  rf=%.2f>" % (self.z, self.b, self.logN, self.rf)
         return line_string
 
 
