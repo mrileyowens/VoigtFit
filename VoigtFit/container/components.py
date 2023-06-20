@@ -9,19 +9,20 @@ from lmfit import Parameters
 
 
 class Component(object):
-    def __init__(self, z, b, logN, var_z=True, var_b=True, var_N=True, tie_z=None, tie_b=None, tie_N=None):
+    def __init__(self, z, b, logN, rf, var_z=True, var_b=True, var_N=True, var_rf=True, tie_z=None, tie_b=None, tie_N=None, tie_rf=None):
         """
         Component object which contains the parameters for each velocity component
-        of an absorption profile: redshift, z; broadning parameter, b; and column density
-        in log(cm^-2).
+        of an absorption profile: redshift, z; broadening parameter, b; column density
+        in log(cm^-2), logN; and residual line flux, rf.
         Options can control whether the components parameters are variable during the fit
         or whether they are tied to another parameter using the `var_` and `tie_` options.
         """
         self._z = z
         self._b = b
         self._logN = logN
-        self.options = {'var_z': var_z, 'var_b': var_b, 'var_N': var_N,
-                        'tie_z': tie_z, 'tie_b': tie_b, 'tie_N': tie_N}
+        self._rf = rf
+        self.options = {'var_z': var_z, 'var_b': var_b, 'var_N': var_N, 'var_rf': var_rf,
+                        'tie_z': tie_z, 'tie_b': tie_b, 'tie_N': tie_N, 'tie_rf': tie_rf}
 
     @property
     def z(self):
@@ -34,6 +35,10 @@ class Component(object):
     @property
     def logN(self):
         return self._logN
+
+    @property
+    def rf(self):
+        return self._rf
 
     @z.setter
     def z(self, val):
@@ -51,6 +56,17 @@ class Component(object):
     def logN(self, val):
         self._logN = val
 
+    @rf.setter
+    def rf(self, val):
+        if val < 0 or val > 1:
+            print(" WARNING - residual line flux not in [0,1] is non-physical! Converting to nearest boundary value of [0,1].")
+            if val > 1:
+                self._rf = 1
+            elif val < 0:
+                self._rf = 0
+        else:
+            self._rf = val
+
     @property
     def tie_z(self):
         return self.options['tie_z']
@@ -64,6 +80,10 @@ class Component(object):
         return self.options['tie_N']
 
     @property
+    def tie_rf(self):
+        return self.options['tie_rf']
+
+    @property
     def var_z(self):
         return self.options['var_z']
 
@@ -74,6 +94,10 @@ class Component(object):
     @property
     def var_N(self):
         return self.options['var_N']
+
+    @property
+    def var_rf(self):
+        return self.options['var_rf']
 
     @tie_z.setter
     def tie_z(self, val):
@@ -87,6 +111,10 @@ class Component(object):
     def tie_N(self, val):
         self.options['tie_N'] = val
 
+    @tie_rf.setter
+    def tie_rf(self, val):
+        self.options['tie_rf'] = val
+
     @var_z.setter
     def var_z(self, val):
         self.options['var_z'] = val
@@ -98,6 +126,10 @@ class Component(object):
     @var_N.setter
     def var_N(self, val):
         self.options['var_N'] = val
+
+    @var_rf.setter
+    def var_rf(self, val):
+        self.options['var_rf'] = val
 
     def set_option(self, key, value):
         """
