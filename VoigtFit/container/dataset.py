@@ -160,7 +160,7 @@ class DataSet(object):
 
         components : dict
             A dictionary of components for each *ion* defined:
-            (*ion* : [z, b, logN, f, options]). See :meth:`DataSet.add_component
+            (*ion* : [z, b, logN, rf, options]). See :meth:`DataSet.add_component
             <VoigtFit.DataSet.add_component>`.
 
         velspan : float, Tuple(float, float)  [default = 400]
@@ -1079,8 +1079,8 @@ class DataSet(object):
         else:
             self.components = dict()
 
-    def add_component(self, ion, z, b, logN, f,
-                      var_z=True, var_b=True, var_N=True, var_f=None, tie_z=None, tie_b=None, tie_N=None, tie_f=None):
+    def add_component(self, ion, z, b, logN, rf,
+                      var_z=True, var_b=True, var_N=True, var_rf=None, tie_z=None, tie_b=None, tie_N=None, tie_rf=None):
         """
         Add component for a given ion. Each component defined will be used for all transitions
         defined for a given ion.
@@ -1101,7 +1101,7 @@ class DataSet(object):
             The 10-base logarithm of the column density of the component.
             The column density is expected in cm^-2.
 
-        f : float
+        rf : float
             The residual line flux of the component
 
         var_z : bool   [default = True]
@@ -1113,10 +1113,10 @@ class DataSet(object):
         var_N : bool   [default = True]
             If `False`, the column density of the component will be kept fixed.
 
-        var_f : bool   [default = True]
+        var_rf : bool   [default = True]
             If `False`, the residual line flux of the component will be kept fixed.
 
-        tie_z, tie_b, tie_N, tie_f : str   [default = None]
+        tie_z, tie_b, tie_N, tie_rf : str   [default = None]
             Parameter constraints for the different variables.
 
         Notes
@@ -1127,20 +1127,20 @@ class DataSet(object):
         For more information about parameter ties, see the documentation for lmfit_.
 
         """
-        this_comp = Component(z, b, logN, f, var_z, var_b, var_N, var_f, tie_z, tie_b, tie_N, tie_f)
+        this_comp = Component(z, b, logN, rf, var_z, var_b, var_N, var_rf, tie_z, tie_b, tie_N, tie_rf)
         if ion in self.components.keys():
             self.components[ion].append(this_comp)
         else:
             self.components[ion] = [this_comp]
 
-    def add_component_velocity(self, ion, v, b, logN, f,
-                               var_z=True, var_b=True, var_N=True, var_f=None, tie_z=None, tie_b=None, tie_N=None, tie_f=None):
+    def add_component_velocity(self, ion, v, b, logN, rf,
+                               var_z=True, var_b=True, var_N=True, var_rf=None, tie_z=None, tie_b=None, tie_N=None, tie_rf=None):
         """
         Same as for :meth:`add_component <VoigtFit.DataSet.add_component>`
         but input is given as relative velocity instead of redshift.
         """
         z = self.redshift + v/299792.458*(self.redshift + 1.)
-        this_comp = Component(z, b, logN, f, var_z, var_b, var_N, var_f, tie_z, tie_b, tie_N, tie_f)
+        this_comp = Component(z, b, logN, rf, var_z, var_b, var_N, var_rf, tie_z, tie_b, tie_N, tie_rf)
         if ion in self.components.keys():
             self.components[ion].append(this_comp)
         else:
@@ -1267,8 +1267,8 @@ class DataSet(object):
                 print("Defining following components:")
                 print("(the lines below can be copied directly to the input file)\n")
                 for z, b, logN in comp_list:
-                    print("component %s  z=%.6f  b=%.1f  logN=%.2f f=%.2f" % (line.ion, z, b, logN, f))
-                    self.add_component(line.ion, z, b, logN, f)
+                    print("component %s  z=%.6f  b=%.1f  logN=%.2f rf=%.2f" % (line.ion, z, b, logN, rf))
+                    self.add_component(line.ion, z, b, logN, rf)
             else:
                 print("No components were defined. Are you sure you want to continue?")
 
@@ -1384,13 +1384,13 @@ class DataSet(object):
                         self.best_fit.pop(parname)
 
         for comp_pars in components_to_add:
-            (num, ion, z, b, logN, f, z_err, b_err, logN_err, f_err) = comp_pars
-            self.add_component(ion, z, b, logN, f)
+            (num, ion, z, b, logN, rf, z_err, b_err, logN_err, rf_err) = comp_pars
+            self.add_component(ion, z, b, logN, rf)
             if fit_pars and self.best_fit:
                 parlist = [['z', z, z_err],
                            ['b', b, b_err],
                            ['logN', logN, logN_err],
-                           ['f', f, f_err]]
+                           ['rf', rf, rf_err]]
 
                 for base, val, err in parlist:
                     parname = '%s%i_%s' % (base, num, ion)
