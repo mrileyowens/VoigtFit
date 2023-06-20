@@ -189,24 +189,29 @@ def load_components_from_file(fname):
                 b_err = float(pars[5])
                 logN = float(pars[6])
                 logN_err = float(pars[7])
-                components_to_add.append([num, ion, z, b, logN,
-                                          z_err, b_err, logN_err])
+                rf = float(pars[8])
+                rf_err = float(pars[9])
+                components_to_add.append([num, ion, z, b, logN, rf,
+                                          z_err, b_err, logN_err, rf_err])
 
     pars = Parameters()
     for comp_pars in components_to_add:
-        (num, ion, z, b, logN, z_err, b_err, logN_err) = comp_pars
+        (num, ion, z, b, logN, rf, z_err, b_err, logN_err, rf_err) = comp_pars
         ion = ion.replace('*', 'x')
         z_name = 'z%i_%s' % (num, ion)
         b_name = 'b%i_%s' % (num, ion)
         N_name = 'logN%i_%s' % (num, ion)
+        rf_name = 'rf%i_%s' % (num, ion)
 
         pars.add(z_name, value=z)
         pars.add(b_name, value=b)
         pars.add(N_name, value=logN)
+        pars.add(rf_name, value=rf)
 
         pars[z_name].stderr = z_err
         pars[b_name].stderr = b_err
         pars[N_name].stderr = logN_err
+        pars[rf_name].stderr = rf_err
 
     return pars
 
