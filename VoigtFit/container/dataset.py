@@ -1267,8 +1267,8 @@ class DataSet(object):
                 print("Defining following components:")
                 print("(the lines below can be copied directly to the input file)\n")
                 for z, b, logN in comp_list:
-                    print("component %s  z=%.6f  b=%.1f  logN=%.2f rf=%.2f" % (line.ion, z, b, logN, rf))
-                    self.add_component(line.ion, z, b, logN, rf)
+                    print("component %s  z=%.6f  b=%.1f  logN=%.2f" % (line.ion, z, b, logN))
+                    self.add_component(line.ion, z, b, logN)
             else:
                 print("No components were defined. Are you sure you want to continue?")
 
