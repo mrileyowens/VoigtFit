@@ -160,7 +160,7 @@ class DataSet(object):
 
         components : dict
             A dictionary of components for each *ion* defined:
-            (*ion* : [z, b, logN, options]). See :meth:`DataSet.add_component
+            (*ion* : [z, b, logN, f, options]). See :meth:`DataSet.add_component
             <VoigtFit.DataSet.add_component>`.
 
         velspan : float, Tuple(float, float)  [default = 400]
@@ -1079,8 +1079,8 @@ class DataSet(object):
         else:
             self.components = dict()
 
-    def add_component(self, ion, z, b, logN,
-                      var_z=True, var_b=True, var_N=True, tie_z=None, tie_b=None, tie_N=None):
+    def add_component(self, ion, z, b, logN, f,
+                      var_z=True, var_b=True, var_N=True, var_f=None, tie_z=None, tie_b=None, tie_N=None, tie_f=None):
         """
         Add component for a given ion. Each component defined will be used for all transitions
         defined for a given ion.
@@ -1101,6 +1101,9 @@ class DataSet(object):
             The 10-base logarithm of the column density of the component.
             The column density is expected in cm^-2.
 
+        f : float
+            The residual line flux of the component
+
         var_z : bool   [default = True]
             If `False`, the redshift of the component will be kept fixed.
 
@@ -1110,7 +1113,10 @@ class DataSet(object):
         var_N : bool   [default = True]
             If `False`, the column density of the component will be kept fixed.
 
-        tie_z, tie_b, tie_N : str   [default = None]
+        var_f : bool   [default = True]
+            If `False`, the residual line flux of the component will be kept fixed.
+
+        tie_z, tie_b, tie_N, tie_f : str   [default = None]
             Parameter constraints for the different variables.
 
         Notes
@@ -1121,20 +1127,20 @@ class DataSet(object):
         For more information about parameter ties, see the documentation for lmfit_.
 
         """
-        this_comp = Component(z, b, logN, var_z, var_b, var_N, tie_z, tie_b, tie_N)
+        this_comp = Component(z, b, logN, f, var_z, var_b, var_N, var_f, tie_z, tie_b, tie_N, tie_f)
         if ion in self.components.keys():
             self.components[ion].append(this_comp)
         else:
             self.components[ion] = [this_comp]
 
-    def add_component_velocity(self, ion, v, b, logN,
-                               var_z=True, var_b=True, var_N=True, tie_z=None, tie_b=None, tie_N=None):
+    def add_component_velocity(self, ion, v, b, logN, f,
+                               var_z=True, var_b=True, var_N=True, var_f=None, tie_z=None, tie_b=None, tie_N=None, tie_f=None):
         """
         Same as for :meth:`add_component <VoigtFit.DataSet.add_component>`
         but input is given as relative velocity instead of redshift.
         """
         z = self.redshift + v/299792.458*(self.redshift + 1.)
-        this_comp = Component(z, b, logN, var_z, var_b, var_N, tie_z, tie_b, tie_N)
+        this_comp = Component(z, b, logN, f, var_z, var_b, var_N, var_f, tie_z, tie_b, tie_N, tie_f)
         if ion in self.components.keys():
             self.components[ion].append(this_comp)
         else:
