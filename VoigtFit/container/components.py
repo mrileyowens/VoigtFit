@@ -216,19 +216,21 @@ def load_components_from_file(fname):
     return pars
 
 
-def components_from_array(ion, *, z, b, logN):
+def components_from_array(ion, *, z, b, logN, rf):
     """
     Create a `lmfit.Parameters` dictionary for a given `ion`
-    and arrays/lists of redshift (z), broadening parameter (b) and column density (logN).
-    A component will be generated for each element in the z, b, logN arrays.
+    and arrays/lists of redshift (z), broadening parameter (b), column density (logN) and residual line flux (rf).
+    A component will be generated for each element in the z, b, logN, rf arrays.
     """
     pars = Parameters()
-    for num, vals in enumerate(zip(z, b, logN)):
+    for num, vals in enumerate(zip(z, b, logN, rf)):
         z_name = 'z%i_%s' % (num, ion)
         b_name = 'b%i_%s' % (num, ion)
         N_name = 'logN%i_%s' % (num, ion)
+        rf_name = 'rf%i_%s' % (num, ion)
 
         pars.add(z_name, value=vals[0])
         pars.add(b_name, value=vals[1])
         pars.add(N_name, value=vals[2])
+        pars.add(rf_name, value=vals[3])
     return pars
