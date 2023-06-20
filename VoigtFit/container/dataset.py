@@ -2242,7 +2242,7 @@ class DataSet(object):
             column density.
 
         components : list(int)
-            List of integers corresponding to the indeces of the components
+            List of integers corresponding to the indices of the components
             to sum over.
 
         Returns
