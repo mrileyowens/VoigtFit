@@ -1366,8 +1366,10 @@ class DataSet(object):
                     b_err = float(pars[5])
                     logN = float(pars[6])
                     logN_err = float(pars[7])
-                    components_to_add.append([num, ion, z, b, logN,
-                                              z_err, b_err, logN_err])
+                    rf = float(pars[8])
+                    rf_err = float(pars[9])
+                    components_to_add.append([num, ion, z, b, logN, rf,
+                                              z_err, b_err, logN_err, rf_err])
                     if ion not in all_ions_in_file:
                         all_ions_in_file.append(ion)
 
