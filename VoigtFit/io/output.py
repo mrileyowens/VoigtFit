@@ -1552,15 +1552,19 @@ def print_results(dataset, params, elements='all', velocity=True, systemic=0):
                 z = params['z%i_%s' % (n, ion)].value
                 b = params['b%i_%s' % (n, ion)].value
                 logN = params['logN%i_%s' % (n, ion)].value
+                rf = params['rf%i_%s' % (n, ion)].value
                 z_err = params['z%i_%s' % (n, ion)].stderr
                 b_err = params['b%i_%s' % (n, ion)].stderr
                 logN_err = params['logN%i_%s' % (n, ion)].stderr
+                rf_err = params['rf%i_%s' % (n, ion)].stderr
                 if z_err is None:
                     z_err = -1.
                 if b_err is None:
                     b_err = -1.
                 if logN_err is None:
                     logN_err = -1.
+                if rf_err is None:
+                    rf_err = -1.
 
                 if velocity:
                     z_std = z_err/(z_sys+1)*299792.458
@@ -1574,6 +1578,7 @@ def print_results(dataset, params, elements='all', velocity=True, systemic=0):
                 output_string = z_format % (z_val, z_std) + "      "
                 output_string += "%6.2f ± %6.2f      " % (b, b_err)
                 output_string += "%7.4f ± %7.4f" % (logN, logN_err)
+                output_string += "%7.4f ± %7.4f" % (rf, rf_err)
 
                 print(output_string)
 
@@ -1596,8 +1601,10 @@ def print_results(dataset, params, elements='all', velocity=True, systemic=0):
                 z = params['z%i_%s' % (n, ion)].value
                 b = params['b%i_%s' % (n, ion)].value
                 logN = params['logN%i_%s' % (n, ion)].value
+                rf = params['rf%i_%s' % (n, ion)].value
                 b_err = params['b%i_%s' % (n, ion)].stderr
                 logN_err = params['logN%i_%s' % (n, ion)].stderr
+                rf_err = params['rf%i_%s' % (n, ion)].stderr
 
                 if velocity:
                     z_std = z_err/(z_sys+1)*299792.458
@@ -1611,6 +1618,7 @@ def print_results(dataset, params, elements='all', velocity=True, systemic=0):
                 output_string = z_format % (z_val, z_std) + "      "
                 output_string += "%6.2f ± %6.2f      " % (b, b_err)
                 output_string += "%.4f ± %.4f" % (logN, logN_err)
+                output_string += "%.4f ± %.4f" % (rf, rf_err)
 
                 print(output_string)
 
