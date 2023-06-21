@@ -2199,5 +2199,5 @@ def show_components(dataset, ion=None):
         for num, comp in enumerate(comps):
             z = comp.z
             vel = (z - z_sys) / (z_sys + 1) * 299792.458
-            print("   %2i  %+8.1f  %.6f   %6.1f   %5.2f" % (num, vel, z,
-                                                            comp.b, comp.logN))
+            print("   %2i  %+8.1f  %.6f   %6.1f   %5.2f   %5.2f" % (num, vel, z,
+                                                            comp.b, comp.logN, comp.rf))
