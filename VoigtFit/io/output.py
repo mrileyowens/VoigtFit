@@ -1857,10 +1857,11 @@ def save_parameters_to_file(dataset, filename, path=''):
                 z = dataset.best_fit['z%i_%s' % (i, ion)]
                 logN = dataset.best_fit['logN%i_%s' % (i, ion)]
                 b = dataset.best_fit['b%i_%s' % (i, ion)]
+                rf = dataset.best_fit['rf%i_%s' % (i, ion)]
                 par_tuple = (i, ion, z.value, z.stderr,
                              b.value, b.stderr,
-                             logN.value, logN.stderr)
-                line_fmt = "%3i  %7s  %+.6f %.6f    %6.2f %6.2f    %.3f %.3f"
+                             logN.value, logN.stderr, rf.value, rf.stderr)
+                line_fmt = "%3i  %7s  %+.6f %.6f    %6.2f %6.2f    %.3f %.3f    %.3f %.3f"
                 output.write(line_fmt % par_tuple + "\n")
             output.write("\n")
 
@@ -1878,9 +1879,10 @@ def save_parameters_to_file(dataset, filename, path=''):
                 z = dataset.best_fit['z%i_%s' % (i, ion)]
                 logN = dataset.best_fit['logN%i_%s' % (i, ion)]
                 b = dataset.best_fit['b%i_%s' % (i, ion)]
+                rf = dataset.best_fit['rf%i_%s' % (i, ion)]
                 vel_value = (z.value - z_sys) / (z_sys + 1) * 299792.458
-                par_tuple = (ion, vel_value, b.value, logN.value)
-                line_fmt = "# component %s  %+8.1f  %6.1f  %6.2f  velocity"
+                par_tuple = (ion, vel_value, b.value, logN.value, rf.value)
+                line_fmt = "# component %s  %+8.1f  %6.1f  %6.2f  %6.2f  velocity"
                 output.write(line_fmt % par_tuple + "\n")
             output.write("\n")
 
@@ -1894,9 +1896,10 @@ def save_parameters_to_file(dataset, filename, path=''):
                 z = dataset.best_fit['z%i_%s' % (i, ion)]
                 logN = dataset.best_fit['logN%i_%s' % (i, ion)]
                 b = dataset.best_fit['b%i_%s' % (i, ion)]
+                rf = dataset.best_fit['rf%i_%s' % (i, ion)]
                 vel_value = (z.value - z_sys) / (z_sys + 1) * 299792.458
-                par_tuple = (ion, vel_value, b.value, logN.value)
-                line_fmt = "# dataset.add_component_velocity('%s', %.1f, %.1f, %.1f)"
+                par_tuple = (ion, vel_value, b.value, logN.value, rf.value)
+                line_fmt = "# dataset.add_component_velocity('%s', %.1f, %.1f, %.1f, %.1f)"
                 output.write(line_fmt % par_tuple + "\n")
             output.write("\n")
 
