@@ -256,8 +256,8 @@ def parse_parameters(fname):
             parlist = line.split()[1:]
             # parlist = ['FeII', 'z=2.2453', 'b=12.4', 'logN=14.3']
             ion = parlist[0]
-            var_z, var_b, var_N = True, True, True
-            tie_z, tie_b, tie_N = None, None, None
+            var_z, var_b, var_N, var_rf = True, True, True, True
+            tie_z, tie_b, tie_N, tie_rf = None, None, None, None
             if '=' in line:
                 for num, val in enumerate(parlist[1:]):
                     if 'z=' in val and '_' not in val:
@@ -269,6 +269,9 @@ def parse_parameters(fname):
                     elif 'logN=' in val:
                         par, value = val.split('=')
                         logN = float(value)
+                    elif 'rf=' in val:
+                        par, value = val.split('=')
+                        rf = float(value)
                     elif 'var_z=' in val:
                         par, value = val.split('=')
                         if value.lower() == 'false':
@@ -293,6 +296,14 @@ def parse_parameters(fname):
                             var_N = True
                         else:
                             var_N = bool(value)
+                    elif 'var_rf=' in val:
+                        par, value = val.split('=')
+                        if value.lower() == 'false':
+                            var_rf = False
+                        elif value.lower() == 'true':
+                            var_rf = True
+                        else:
+                            var_rf = bool(value)
                     elif 'tie_z=' in val:
                         par, value = val.split('=')
                         tie_z = value
@@ -302,6 +313,9 @@ def parse_parameters(fname):
                     elif 'tie_N=' in val:
                         par, value = val.split('=')
                         tie_N = value
+                    elif 'tie_rf=' in val:
+                        par, value = val.split('=')
+                        tie_rf = value
                     elif '=' not in val:
                         if num == 0:
                             z = float(val)
@@ -309,11 +323,14 @@ def parse_parameters(fname):
                             b = float(val)
                         elif num == 2:
                             logN = float(val)
+                        elif num == 3:
+                            rf = float(val)
 
             else:
                 z = float(parlist[1])
                 b = float(parlist[2])
                 logN = float(parlist[3])
+                rf = float(parlist[4])
 
             if 'velocity' in line.lower():
                 vel = True
@@ -325,7 +342,7 @@ def parse_parameters(fname):
             else:
                 thermal = False
 
-            components.append([ion, z, b, logN, var_z, var_b, var_N, tie_z, tie_b, tie_N, vel, thermal])
+            components.append([ion, z, b, logN, rf, var_z, var_b, var_N, var_rf, tie_z, tie_b, tie_N, tie_rf, vel, thermal])
 
         elif 'copy' in line and 'output' not in line:
             # strip comments:
