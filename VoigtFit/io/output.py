@@ -2119,7 +2119,7 @@ def save_individual_components(dataset, filename, path=''):
                         logN = pars['logN%i_%s' % (n, ion)].value
                         tau += voigt.Voigt(profile_wl, l0, f, 10**logN, 1.e5*b, gam, z=z)
 
-                    profile = (1 - rf) * np.exp(-tau) + rf
+                    profile = np.exp(-tau)
 
                     if isinstance(kernel, float):
                         LSF = voigt.gaussian(10*int(kernel) + 1, kernel)
